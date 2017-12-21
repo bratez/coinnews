@@ -5,17 +5,18 @@ export class Coin {
   name: string;
   symbol: string;
   rank: number;
-  price_usd: number;
-  price_btc: number;
-  day_volume_usd: number;
-  market_cap_usd: string;
-  available_supply: number;
-  total_supply: number;
-  max_supply: number;
-  percent_change_1h: number;
-  percent_change_24h: number;
-  percent_change_7d: number;
-  last_updated: number;
+  usd: number;
+  btc: number;
+  dayVolumeUsd: number;
+  marketCapUsd: string;
+  availableSupply: number;
+  totalSupply: number;
+  maxSupply: number;
+  oneHour: number;
+  oneDay: number;
+  oneWeek: number;
+  lastUpdated: number;
+  prices: Array<number>;
 
   constructor(data?: any) {
     updatedModelWithValues(this, data);
