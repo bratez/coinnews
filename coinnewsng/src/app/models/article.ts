@@ -11,8 +11,6 @@ export class Article {
   title: string;
   url:  string;
   urlToImage:  string;
-  coinPrices: Array<Coin>;
-  stopCheching: boolean;
 
   constructor(data?: any) {
     updatedModelWithValues(this, data);

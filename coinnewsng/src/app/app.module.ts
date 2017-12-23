@@ -1,8 +1,10 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
-import { LocalstorageService } from './services/localstorage.service';
+import { Service } from './services/service.service';
+import { Actions } from './redux/actions';
 import { HttpModule } from '@angular/http';
+import { ReduxStoreModule } from './redux/store.module';
 
 @NgModule({
   declarations: [
@@ -10,10 +12,12 @@ import { HttpModule } from '@angular/http';
   ],
   imports: [
     BrowserModule,
-    HttpModule
+    HttpModule,
+    ReduxStoreModule
   ],
   providers: [
-    LocalstorageService
+    Service,
+    Actions
   ],
   bootstrap: [AppComponent]
 })

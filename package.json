@@ -1,5 +1,8 @@
 {
 	"name": "coinnews",
 	"main": "index.html",
-	"inject_js_start": "C:/OpenServer/domains/nwjs/coinnews/script.js"
+	"inject_js_start": "C:/OpenServer/domains/nwjs/coinnews/script.js",
+	"dependencies": {
+		"@angular-redux/store": "github:angular-redux/store"
+	}
 }

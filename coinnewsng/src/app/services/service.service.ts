@@ -9,7 +9,7 @@ import {Coin} from '../models/coin';
 import {Source} from '../models/source';
 
 @Injectable()
-export class LocalstorageService {
+export class Service {
   currentTime = new Date();
   logsStorageName = `coinnewsng_${this.currentTime.getDate()}-${this.currentTime.getMonth()}-${this.currentTime.getFullYear()}`;
   apiKey = 'cf2c9a25b09a49d9ad67f99f6057bcd6';
@@ -65,9 +65,7 @@ export class LocalstorageService {
         source: new Source({id: article.source.id, name: article.source.name}),
         title: article.title,
         url:  article.url,
-        urlToImage:  article.urlToImage,
-        coinPrices: article.coinPrices && article.coinPrices.length ? this.fetchCoins(article.coinPrices) : [],
-        stopChecking: false
+        urlToImage:  article.urlToImage
       });
     });
   }
@@ -89,8 +87,7 @@ export class LocalstorageService {
         oneHour: coin.percent_change_1h,
         oneDay: coin.percent_change_24h,
         oneWeek: coin.percent_change_7d,
-        lastUpdated: coin.last_updated,
-        prices: []
+        lastUpdated: coin.last_updated
       });
     });
   }

@@ -16,7 +16,6 @@ export class Coin {
   oneDay: number;
   oneWeek: number;
   lastUpdated: number;
-  prices: Array<number>;
 
   constructor(data?: any) {
     updatedModelWithValues(this, data);

@@ -1,7 +1,11 @@
 import { Component } from '@angular/core';
-import { LocalstorageService } from './services/localstorage.service';
+import { Subscription } from 'rxjs/Subscription';
+import { Actions } from './redux/actions';
 import { Article } from './models/article';
 import { Coin } from './models/coin';
+import { Service } from './services/service.service';
+import {NgRedux} from '@angular-redux/store';
+import {RootState} from './redux/root-reducer';
 
 @Component({
   selector: 'app-root',
@@ -10,18 +14,22 @@ import { Coin } from './models/coin';
 })
 export class AppComponent {
   title = 'app';
+  dataSubscription: Subscription;
   currentCoinNews: Array<Article> = [];
+  coins: Array<Array<Coin>> = [];
   getNewsInterval = 3000;
   inRequest = false;
   recording: any;
   isRecording = false;
   toggleButtonLabel = 'Start Recording';
 
-  constructor (private localstorageService: LocalstorageService) {
-    this.currentCoinNews = this.localstorageService.getCurrentList();
-    if (this.currentCoinNews.length) {
-      this.startRecording();
-    }
+  constructor (private ngRedux: NgRedux<RootState>, private actions: Actions, private service: Service) {
+    this.actions.getCurrentList();
+
+    this.dataSubscription = this.ngRedux.select(state => state.coinnews).subscribe((data) => {
+      this.currentCoinNews = data.news;
+      this.coins = data.coins;
+    });
   }
 
   startRecording() {
@@ -43,45 +51,25 @@ export class AppComponent {
   }
 
   recordNews() {
-    this.localstorageService.getNews().subscribe(news => {
-      this.localstorageService.getCoins().subscribe(coins => {
-        let coinNews: Array<Article> = [];
-        coinNews = this.rearrangeNews(this.currentCoinNews.concat(news), coins);
-        this.currentCoinNews = coinNews;
-      });
+    /*this.service.getNews().subscribe(news => {
+      this.currentCoinNews = this.rearrangeNews(this.currentCoinNews.concat(news));
     });
+
+    this.service.getCoins().subscribe(coins => {
+       this.coins.push(coins);
+    });*/
+    this.actions.getCurrentList();
   }
 
-  rearrangeNews(news, prices):Array<Article> {
+  rearrangeNews(news):Array<Article> {
     let noDublicates: Array<Article> = [];
     let urls: Array<string> = [];
     news.forEach(article => {
       if (!urls.includes(article.url)) {
-        article.coinPrices = this.rearrangePrices(article.coinPrices, prices);
         urls.push(article.url);
         noDublicates.push(article);
       }
     });
     return noDublicates;
-  }
-
-  rearrangePrices(coins, newCoins):Array<Coin> {
-    const maxPrices = 10;
-    if (!coins.length) {
-      coins = newCoins;
-    } else {
-      let prices = [];
-      newCoins.forEach(coin => {
-        if (typeof prices[coin.id] !== 'undefined') {
-          prices[coin.id] = coin.usd;
-        }
-      });
-      coins.forEach(coin => {
-        if (maxPrices >= coin.prices.length) {
-          coin.prices.push(prices[coin.id]);
-        }
-      });
-    }
-    return coins;
   }
 }
